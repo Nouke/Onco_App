@@ -30,6 +30,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
     int seconde = -1, minute, heure;
     String cheminDuFichier;
     String fichierAudio;
+    public static final int permission = 0;
 
 
     @Override

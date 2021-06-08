@@ -38,7 +38,7 @@ public class RecordingsActivity extends AppCompatActivity {
     ImageView prev, next, pause;
     SeekBar seekBar;
     int audio_index = 0;
-    //  public static final int PERMISSION_READ = 0;
+    public static final int PERMISSION_READ = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +47,15 @@ public class RecordingsActivity extends AppCompatActivity {
     }
 
     public void getRecordings() {
-        //   recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        current = (TextView) findViewById(R.id.current);
+        total = (TextView) findViewById(R.id.total);
+        prev = (ImageView) findViewById(R.id.prev);
+        next = (ImageView) findViewById(R.id.next);
+        pause = (ImageView) findViewById(R.id.pause);
+        seekBar = (SeekBar) findViewById(R.id.seekbar);
 
         audioArrayList = new ArrayList<>();
         mediaPlayer = new MediaPlayer();
@@ -199,7 +205,8 @@ public class RecordingsActivity extends AppCompatActivity {
         //création d'un résolveur de contenu et récupération de fichiers audio depuis le stockage
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
-        Cursor cursor = contentResolver.query(uri, null, MediaStore.Audio.Media.DATA + " like ?", new String[]{"%11zon%"}, null);
+        Cursor cursor = contentResolver.query(uri, null, MediaStore.Audio.Media.DATA + " like ?",
+                new String[]{"%Oncodroid%"}, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -225,13 +232,23 @@ public class RecordingsActivity extends AppCompatActivity {
             } while (cursor.moveToNext());
         }
 
+        RecordingsAdapter adapter = new RecordingsAdapter(this, audioArrayList);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new RecordingsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int pos, View v) {
+                playRecording(pos);
+            }
+        });
 
-   /*  @Override
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }
-    } */
     }
+    
 }
