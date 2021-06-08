@@ -37,7 +37,9 @@ public class AudioRecorderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_recorder);
-
+        if (checkPermission()) {
+            setAudioRecorder();
+        }
     }
 
     public void setAudioRecorder() {
@@ -186,6 +188,53 @@ public class AudioRecorderActivity extends AppCompatActivity {
             minute = 0;
         }
         return String.format("%02d:%02d:%02d", heure, minute, seconde);
+    }
+
+    // Donne les droits d'execution
+    public boolean checkPermission() {
+        int RECORD_AUDIO_PERMISSION = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+        int WRITE_EXTERNAL_PERMISSION = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        ArrayList<String> PERMISSION_LIST = new ArrayList<>();
+        if ((RECORD_AUDIO_PERMISSION != PackageManager.PERMISSION_GRANTED)) {
+            PERMISSION_LIST.add(Manifest.permission.RECORD_AUDIO);
+        }
+        if ((WRITE_EXTERNAL_PERMISSION != PackageManager.PERMISSION_GRANTED)) {
+            PERMISSION_LIST.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (!PERMISSION_LIST.isEmpty()) {
+            ActivityCompat.requestPermissions(this, PERMISSION_LIST.toArray(new String[PERMISSION_LIST.size()]), permission);
+            return false;
+        }
+        return true;
+    }
+    // Autorisation des droits d'acces au micro et au stockage de l'appareil
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean record = false, storage = false;
+        switch (requestCode) {
+            case permission: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++) {
+                        if (permissions[i].equals(Manifest.permission.RECORD_AUDIO)) {
+                            if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                                record = true;
+                            } else {
+                                Toast.makeText(getApplicationContext(), "j'autorise l'acces a mon micro", Toast.LENGTH_LONG).show();
+                            }
+                        } else if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                            if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                                storage = true;
+                            } else {
+                                Toast.makeText(getApplicationContext(), "j'autorise l'acces a mon stockage de fichiers", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                }
+                if (record && storage) {
+                    setAudioRecorder();
+                }
+            }
+        }
     }
 
     @Override

@@ -43,13 +43,17 @@ public class RecordingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_recordings);
+        if(checkPermission()) {
+            getRecordings();
+        }
     }
 
     public void getRecordings() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
         current = (TextView) findViewById(R.id.current);
         total = (TextView) findViewById(R.id.total);
         prev = (ImageView) findViewById(R.id.prev);
@@ -242,6 +246,29 @@ public class RecordingsActivity extends AppCompatActivity {
         });
 
     }
+    public boolean checkPermission() {
+        int READ_EXTERNAL_PERMISSION = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if ((READ_EXTERNAL_PERMISSION != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_READ);
+            return false;
+        }
+        return true;
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSION_READ: {
+                if (grantResults.length > 0 && permissions[0].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    if (grantResults.length > 0 && permissions[0].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        Toast.makeText(getApplicationContext(), "J'autorise l'acces a mon stockage", Toast.LENGTH_LONG).show();
+                    } else {
+                        getAudioRecordings();
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     protected void onDestroy() {
@@ -250,5 +277,5 @@ public class RecordingsActivity extends AppCompatActivity {
             mediaPlayer.release();
         }
     }
-    
+
 }

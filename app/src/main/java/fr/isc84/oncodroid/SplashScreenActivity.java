@@ -19,7 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-            // demarrer une page
+            // demarrer une activite
                 Intent intent = new Intent(getApplicationContext(), AudioRecorderActivity.class);
                 startActivity(intent);
                 finish();
