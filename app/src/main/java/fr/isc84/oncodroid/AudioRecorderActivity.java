@@ -80,7 +80,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
 
                     //Concatenation nom file et date
                     fichierAudio = "Dictée_du_" + date;
-                    cheminDuFichier = myDirectory.getAbsolutePath() + File.separator + fichierAudio;
+                    cheminDuFichier = myDirectory.getAbsolutePath() + File.separator + fichierAudio +".mp3";
                     startAudioRecorder();
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -1,6 +1,7 @@
 package fr.isc84.oncodroid;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import java.io.File;
@@ -87,7 +91,13 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.vi
                                    // boolean result = con.storeFile("/public_ftp/incoming/"+audioArrayList.get(getAdapterPosition()).getTitle(), in);
                                     in.close();
                                     if (result) {
-                                        Log.v("upload result", "succeeded");
+                                       // Log.v("upload result", "succeeded");
+                                        Snackbar snackbar = Snackbar.make(itemView.getRootView(), "Dictée envoyée avec succes", Snackbar.LENGTH_LONG)
+                                                .setAction("Action", null);
+                                        View sbView = snackbar.getView();
+                                        // sbView.setBackgroundColor(Color.rgb(0, 128, 128));
+                                        sbView.setBackgroundColor(Color.rgb(46, 204, 113));
+                                        snackbar.show();
 
                                     }
                                     con.logout();
@@ -96,6 +106,11 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.vi
                             }
                             catch (Exception e)
                             {
+                                Snackbar snackbar = Snackbar.make(itemView.getRootView(), "Echec d'envoi de la dictée, veuillez réesayer plus tard ou contacter l'equipe informatique", Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null);
+                                View sbView = snackbar.getView();
+                                sbView.setBackgroundColor(Color.RED);
+                                snackbar.show();
                                 e.printStackTrace();
                             }
 
