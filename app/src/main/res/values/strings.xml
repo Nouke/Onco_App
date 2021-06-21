@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Oncodroid</string>
+    <string name="delete">Supprimer</string>
 </resources>

@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -24,9 +25,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 
 public class RecordingsActivity extends AppCompatActivity {
 
@@ -35,7 +39,7 @@ public class RecordingsActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     double current_pos, total_duration;
     TextView current, total;
-    ImageView prev, next, pause;
+    ImageView prev, next, pause,send;
     SeekBar seekBar;
     int audio_index = 0;
     public static final int PERMISSION_READ = 0;
@@ -60,6 +64,7 @@ public class RecordingsActivity extends AppCompatActivity {
         next = (ImageView) findViewById(R.id.next);
         pause = (ImageView) findViewById(R.id.pause);
         seekBar = (SeekBar) findViewById(R.id.seekbar);
+        send = (ImageView) findViewById(R.id.send);
 
         audioArrayList = new ArrayList<>();
         mediaPlayer = new MediaPlayer();
@@ -261,7 +266,7 @@ public class RecordingsActivity extends AppCompatActivity {
             case PERMISSION_READ: {
                 if (grantResults.length > 0 && permissions[0].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     if (grantResults.length > 0 && permissions[0].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        Toast.makeText(getApplicationContext(), "J'autorise l'acces a mon stockage", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "J'autorise l'acces à mon stockage", Toast.LENGTH_LONG).show();
                     } else {
                         getAudioRecordings();
                     }

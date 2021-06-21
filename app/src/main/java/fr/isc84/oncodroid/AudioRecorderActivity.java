@@ -9,6 +9,7 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -78,7 +79,7 @@ public class AudioRecorderActivity extends AppCompatActivity {
                     String date = dateFormat.format(new Date());
 
                     //Concatenation nom file et date
-                    fichierAudio = "REC" + date;
+                    fichierAudio = "Dictée_du_" + date;
                     cheminDuFichier = myDirectory.getAbsolutePath() + File.separator + fichierAudio;
                     startAudioRecorder();
                 } catch (Exception e) {
@@ -89,13 +90,13 @@ public class AudioRecorderActivity extends AppCompatActivity {
         });
     }
 
-    //fonction permettant de demarrer l'enregistrement audio
+    //fonction permettant de demarrer l'enregistrement audio et choix du format de sortie
     public void startAudioRecorder() {
         try {
             mediaRecorder = new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mediaRecorder.setOutputFile(cheminDuFichier);
             mediaRecorder.prepare();
             mediaRecorder.start();
@@ -243,5 +244,19 @@ public class AudioRecorderActivity extends AppCompatActivity {
         if (mediaRecorder != null) {
             mediaRecorder.release();
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.delItem) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
